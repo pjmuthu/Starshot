@@ -6,9 +6,7 @@
 typedef struct {
     Camera2D camera;
     Vector2 velocity;  // Add velocity vector for camera movement
-    float zoomVelocity;  // Add velocity for camera zooming
-    float acceleration;  // Adjust the acceleration factor as needed
-    float skew;
+    float tilt;
 } CameraState;
 
 extern CameraState InitCameraState(int screenWidth, int screenHeight);
