@@ -7,7 +7,7 @@ CameraState InitCameraState(int screenWidth, int screenHeight) {
 	cameraState.camera.target = (Vector2){ 0, 0 };
 	cameraState.camera.offset = (Vector2){ screenWidth / 2, screenHeight / 2 };
 	cameraState.camera.rotation = 0.0f;
-	cameraState.camera.zoom = 1.0f;
+	cameraState.camera.zoom = 0.1f;
 	cameraState.velocity = (Vector2){ 0, 0 };
 	return cameraState;
 }

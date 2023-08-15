@@ -8,14 +8,16 @@
 typedef struct {
     Vector2 position;
     Vector2 velocity;
-    float rotation;
-    float acceleration;
+    float engine;
     int numPoints;
     Vector2 path[MAX_PATH_POINTS];
     Planet collisionObject;
+    float fuelMax;
+    float fuel;
 } Player;
 
 void InitPlayer(Player* player, Sun* sun, float * time);
-void UpdatePlayer(Player* player, Sun* sun, const CameraState* cameraState, float * time);
+void UpdatePlayer(Player* player, Sun* sun, const CameraState* cameraState, float * time, bool paused);
+void ApplyEngine(Player* player, float acceleration, Vector2 direction);
 
 #endif // PLAYER_H

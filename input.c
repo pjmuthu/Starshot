@@ -3,36 +3,41 @@
 #include "raymath.h"
 #include "player.h"
 
-void HandleKeyboardInput(Player* player, Sun* sun, CameraState* cameraState, float* time) {
+void HandleKeyboardInput(Player* player, Sun* sun, CameraState* cameraState, float* time, int * playspeed) {
 	if (IsKeyDown(KEY_W)) cameraState->camera.target.y -= 2.0f / cameraState->camera.zoom;
 	else if (IsKeyDown(KEY_S)) cameraState->camera.target.y += 2.0f / cameraState->camera.zoom;
 	if (IsKeyDown(KEY_A)) cameraState->camera.target.x -= 2.0f / cameraState->camera.zoom;
 	if (IsKeyDown(KEY_D)) cameraState->camera.target.x += 2.0f / cameraState->camera.zoom;
 	else if (IsKeyPressed(KEY_R)) InitPlayer(player, sun, time);
-
-	if (IsKeyDown(KEY_UP)) player->velocity.y -= player->acceleration * 0.1f;
-	else if (IsKeyDown(KEY_DOWN)) player->velocity.y += player->acceleration * 0.1f;
-	if (IsKeyDown(KEY_LEFT)) player->velocity.x -= player->acceleration * 0.1f;
-	else if (IsKeyDown(KEY_RIGHT)) player->velocity.x += player->acceleration * 0.1f;
-
-
+	if (IsKeyPressed(KEY_P)) *playspeed = 0;
+	if (IsKeyPressed(KEY_KP_ADD)) if (GetFPS() > TARGET_FPS * 0.5f ) *playspeed += 1;
+	if (IsKeyPressed(KEY_KP_SUBTRACT)) if (*playspeed > 0) 	*playspeed -= 1;
 }
 
-void HandleMouseInput(Player* player, Sun* sun, CameraState* cameraState, float* time) {
+float ExponentialEaseInOut(float t) {
+	if (t <= 0.0f) return 0.0f;
+	if (t >= 1.0f) return 1.0f;
+	return t < 0.5f ? 0.5f * pow(2.0f, 10.0f * (2.0f * t - 1.0f)) : 0.5f * (-pow(2.0f, -10.0f * (2.0f * t - 1.0f)) + 2.0f);
+}
+
+void HandleMouseInput(Player* player, Sun* sun, CameraState* cameraState, float* time, int* playspeed) {
 	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 		Vector2 mousePositionScreen = GetMousePosition();
 		Vector2 mousePositionWorld = GetScreenToWorld2D(mousePositionScreen, cameraState->camera);
 		mousePositionWorld.y /= cameraState->tilt;
-		Vector2 mouse2Player = Vector2Subtract(mousePositionWorld, player->position);
-		float magnitude = Vector2LengthSqr(mouse2Player);
-		mouse2Player = Vector2Normalize(mouse2Player);
-		float fraction = Clamp(magnitude / 262144, 0.0f, 1.0f);
-		float modifiedAcceleration = player->acceleration * fraction * fraction;
-		player->velocity = Vector2Add(player->velocity, Vector2Scale(mouse2Player, modifiedAcceleration));
-	} 
+		Vector2 mouseToPlayer = Vector2Subtract(mousePositionWorld, player->position);
+		float distance = Vector2Length(mouseToPlayer);
+		mouseToPlayer = Vector2Normalize(mouseToPlayer);
+		float modifiedAcceleration = Lerp(player->engine * 0.01f, player->engine, ExponentialEaseInOut(Clamp(distance / 720.0f, 0.0f, 1.0f)));
+		if (*playspeed > 0) ApplyEngine(player, modifiedAcceleration, mouseToPlayer);
+	}
 
-
-	cameraState->camera.zoom -= -GetMouseWheelMove() * 0.1f;
-	cameraState->camera.zoom = Clamp(cameraState->camera.zoom, 0.1f, 2.0f);
-	cameraState->tilt = 1 / Clamp((cameraState->camera.zoom * 2) + 0.5, 1, 2);
+	float targetZoom = cameraState->camera.zoom;
+	const float zoomSpeed = 0.5f;
+	targetZoom += GetMouseWheelMove() * zoomSpeed;
+	cameraState->camera.target.y += GetMouseWheelMove() * cameraState->camera.zoom;
+	targetZoom = Clamp(targetZoom, 0.1f, 2.0f);
+	float zoomDiff = targetZoom - cameraState->camera.zoom;
+	cameraState->camera.zoom += zoomDiff * 0.1f;
+	cameraState->tilt = 1 / Clamp((cameraState->camera.zoom * 2) + 1.0, 1, 2);
 }

@@ -21,36 +21,38 @@ int main() {
 	Sun ourSun = ADITYA;
 	Player player;
 	float time = 0;
-
+	float timeStep = TIME_STEP;
+	int frames = 0;
+	int playspeed = 1;
 	InitPlayer(&player, &ourSun, &time);
 
-	SetTargetFPS(60);
+	SetTargetFPS(TARGET_FPS);
 	while (!WindowShouldClose()) {
-		time += step_time;
+		frames++;
+		time += playspeed == 0 ? 0.0f : TIME_STEP;
 
-		HandleKeyboardInput(&player, &ourSun, &cameraState, &time);
-		HandleMouseInput(&player, &ourSun , &cameraState, &time);
+		UpdatePlayer(&player, &ourSun, &cameraState, &time, playspeed == 0);
 
-		UpdateCameraState(&cameraState);
-		UpdatePlayer(&player, &ourSun, &cameraState, &time);
-		UpdateMapPositions(&ourSun, time);
-
-		BeginDrawing();
-		ClearBackground(RAYWHITE);
-		
-		BeginMode2D(cameraState.camera);
-		DrawMap(&cameraState, ourSun, time);
-		DrawPlayer(&player, &cameraState);
-		EndMode2D();
-		
-		DrawFPS(10, 10);
-		EndDrawing();
-
+		if (frames > playspeed) {
+			frames = 0;
+			UpdateCameraState(&cameraState);
+			UpdateMapPositions(&ourSun, time);
+			HandleKeyboardInput(&player, &ourSun, &cameraState, &time, &playspeed);
+			HandleMouseInput(&player, &ourSun, &cameraState, &time, &playspeed);
+			BeginDrawing();
+			ClearBackground(RAYWHITE);
+			BeginMode2D(cameraState.camera);
+			DrawPlayer(&player, &cameraState);
+			DrawMap(&cameraState, ourSun, time);
+			EndMode2D();
+			DrawUI(&player, &playspeed);
+			EndDrawing();
+		}
 	}
 
 	// De-Initialization
 	CloseCameraState(&cameraState);
 	CloseWindow();
-	
+
 	return 0;
 }

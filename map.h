@@ -6,7 +6,9 @@
 
 #define MOON_MAX 8
 #define PLANET_MAX 16
-#define MAX_PATH_POINTS 8192
+#define MAX_PATH_POINTS 4096
+#define TIME_STEP 0.001
+#define TARGET_FPS 60
 
 typedef struct {
 	char name[16];
@@ -37,7 +39,6 @@ typedef struct {
 	Vector2 startVelocity;
 } Sun;
 
-static float step_time = 0.01;
 
 void UpdateMapPositions(Sun* sun, float t);
 Planet* GetClosestPlanet(Vector2 position, Sun* sun, float t);

@@ -25,18 +25,18 @@ void DrawMap(const CameraState* cameraState, Sun ourSun, float time) {
 		DrawEllipseLines(0, 0, ourSun.planets[i].distance, ourSun.planets[i].distance * cameraState->tilt, LIGHTGRAY);
 		Vector2 planetPosition = { ourSun.planets[i].position.x, ourSun.planets[i].position.y * cameraState->tilt };
 		if (IsPointInCameraView(&(cameraState->camera), planetPosition)) {
-			DrawCircleV(planetPosition, ourSun.planets[i].radius, GRAY);
+			DrawCircleV(planetPosition, ourSun.planets[i].radius, LIGHTGRAY);
 			for (int j = 0; j < ourSun.planets[i].moonCount; j++) {
 				Vector2 moonPosition = { ourSun.planets[i].moons[j].position.x, ourSun.planets[i].moons[j].position.y * cameraState->tilt };
 				if (IsPointInCameraView(&(cameraState->camera), moonPosition)) {
-					DrawCircleV(moonPosition, ourSun.planets[i].moons[j].radius, GRAY);
+					DrawCircleV(moonPosition, ourSun.planets[i].moons[j].radius, LIGHTGRAY);
 				}
 			}
 		}
 	}
 
 	if (IsPointInCameraView(&(cameraState->camera), Vector2Zero())) {
-		DrawCircleV(Vector2Zero(), ourSun.radius, GRAY);
+		DrawCircleV(Vector2Zero(), ourSun.radius, LIGHTGRAY);
 	}
 }
 
@@ -45,7 +45,18 @@ void DrawPlayer(Player* player, const CameraState* cameraState) {
 	DrawPolyLines(position, 3, 8 / cameraState->camera.zoom, 90.0f, GRAY);
 	DrawLineStrip(player->path, player->numPoints, GRAY);
 	if (player->numPoints < MAX_PATH_POINTS) {
-		DrawCircleV(player->path[player->numPoints], 4 / cameraState->camera.zoom, RED);
+		DrawCircleV(player->path[player->numPoints - 1], 4 / cameraState->camera.zoom, RED);
 	}
+}
 
+
+void DrawUI(Player* player, int * playspeed) {
+	Rectangle fuelLevelBackground = { 20, 20, player->fuelMax, 10 };
+	DrawRectangleRec(fuelLevelBackground, LIGHTGRAY);
+	Rectangle healthBar = { fuelLevelBackground.x, fuelLevelBackground.y, fuelLevelBackground.width, fuelLevelBackground.height };
+	healthBar.width = player->fuel;
+	DrawRectangleRec(healthBar, player->fuel < 64 ? CLITERAL(Color) { 214, 48, 49, 255 } : CLITERAL(Color) { 231, 187, 118, 255 });
+
+	DrawText(TextFormat("%2i", *playspeed), 10, 10, 10, GRAY);
+	DrawText(TextFormat("%2i", GetFPS()), 30, 10, 10, GRAY);
 }
