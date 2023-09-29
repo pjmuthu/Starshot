@@ -42,7 +42,14 @@ Planet* GetClosestPlanet(Vector2 position, Sun* sun, float t) {
     return closestPlanet;
 }
 
-void InitMap(Sun* sun, float * time) {
-    time = 0;
+void InitMap(Sun* sun) {
+    for (int i = 0; i < sun->planetCount; i++) {
+        sun->planets[i].armor = sun->planets[i].armorMax;
+        sun->planets[i].health = sun->planets[i].healthMax;
+        for (int j = 0; j < sun->planets[i].moonCount; j++) {
+            sun->planets[i].moons[j].armor = sun->planets[i].moons[j].armorMax;
+            sun->planets[i].moons[j].health = sun->planets[i].moons[j].healthMax;
+        }
+    }
 }
 

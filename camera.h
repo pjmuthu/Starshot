@@ -3,13 +3,15 @@
 
 #include "raylib.h"
 
+
+
 typedef struct {
     Camera2D camera;
     Vector2 velocity;  // Add velocity vector for camera movement
     float tilt;
 } CameraState;
 
-extern CameraState InitCameraState(int screenWidth, int screenHeight);
+extern CameraState InitCameraState();
 extern void UpdateCameraState(CameraState* cameraState);
 extern void CloseCameraState(CameraState* cameraState);
 

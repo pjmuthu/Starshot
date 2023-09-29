@@ -16,7 +16,11 @@ typedef struct {
 	float angle;
 	float period;
 	float distance;
+	int healthMax;
+	int armorMax;
 	Vector2 position;
+	int health;
+	int armor;
 } Moon;
 
 typedef struct {
@@ -26,8 +30,12 @@ typedef struct {
 	float period;
 	float distance;
 	int moonCount;
+	int healthMax;
+	int armorMax;
 	Moon moons[MOON_MAX];
 	Vector2 position;
+	int health;
+	int armor;
 } Planet;
 
 typedef struct {
@@ -40,6 +48,7 @@ typedef struct {
 } Sun;
 
 
+void InitMap(Sun* sun);
 void UpdateMapPositions(Sun* sun, float t);
 Planet* GetClosestPlanet(Vector2 position, Sun* sun, float t);
 

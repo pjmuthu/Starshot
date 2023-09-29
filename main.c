@@ -15,7 +15,7 @@ int main() {
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "Starshot");
 
-	CameraState cameraState = InitCameraState(screenWidth, screenHeight);
+	CameraState cameraState = InitCameraState();
 
 	// Main loop
 	Sun ourSun = ADITYA;
@@ -42,8 +42,8 @@ int main() {
 			BeginDrawing();
 			ClearBackground(RAYWHITE);
 			BeginMode2D(cameraState.camera);
-			DrawPlayer(&player, &cameraState);
 			DrawMap(&cameraState, ourSun, time);
+			DrawPlayer(&player, &cameraState);
 			EndMode2D();
 			DrawUI(&player, &playspeed);
 			EndDrawing();

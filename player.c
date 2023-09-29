@@ -11,6 +11,11 @@ void InitPlayer(Player* player, Sun* sun, float* time) {
 	*time = 0;
 	player->fuelMax = 256;
 	player->fuel = player->fuelMax;
+	player->sensorMax = 256;
+	player->sensor = player->sensorMax;
+	player->sensorRange = 128;
+
+	InitMap(sun);
 }
 
 void ApplyEngine(Player* player, float acceleration, Vector2 direction) {
@@ -19,7 +24,7 @@ void ApplyEngine(Player* player, float acceleration, Vector2 direction) {
 }
 
 bool ApplyGravity(Player* player, Sun* sun, float time) {
-
+	const int GRAVITY = 2.0;
 	Vector2 sunToPlayer = Vector2Negate(player->position);
 	float minDistance = Vector2LengthSqr(sunToPlayer);
 	UpdateMapPositions(sun, time);
@@ -42,24 +47,27 @@ bool ApplyGravity(Player* player, Sun* sun, float time) {
 	else {
 		if (2.0f * minDistance < closestPlanet->radius * closestPlanet->radius) return false;
 		Vector2 planetToPlayer = Vector2Subtract(closestPlanet->position, player->position);
-		float forceMagnitude = 4.0f * closestPlanet->radius / minDistance;
+		float forceMagnitude = GRAVITY * closestPlanet->radius / minDistance;
 		float forceDirection = atan2f(planetToPlayer.y, planetToPlayer.x);
 		player->velocity.x += cosf(forceDirection) * forceMagnitude;
 		player->velocity.y += sinf(forceDirection) * forceMagnitude;
-
+		
 		for (int i = 0; i < closestPlanet->moonCount; i++) {
 			Moon* moon = &closestPlanet->moons[i];
 			Vector2 moonToPlayer = Vector2Subtract(moon->position, player->position);
 			minDistance = Vector2LengthSqr(moonToPlayer);
-			if (4.0f * minDistance < moon->radius * moon->radius) return false;
+			if (0.25 * GRAVITY * minDistance < moon->radius * moon->radius) return false;
 			float forceMagnitude = moon->radius / minDistance;
 			float forceDirection = atan2f(moonToPlayer.y, moonToPlayer.x);
 			player->velocity.x += cosf(forceDirection) * forceMagnitude;
 			player->velocity.y += sinf(forceDirection) * forceMagnitude;
 		}
+		
+		
 	}
 	return true;
 }
+
 
 
 void UpdatePlayer(Player* player, Sun* sun, const CameraState* cameraState, float* time, bool paused) {
@@ -84,6 +92,7 @@ void UpdatePlayer(Player* player, Sun* sun, const CameraState* cameraState, floa
 
 	player->position = originalPosition;
 	player->velocity = originalVelocity;
+	player->relativeVelocity = Vector2Distance(player->path[0], player->path[1]);
 
 	if (!paused) {
 		if (!ApplyGravity(player, sun, *time) || player->fuel < 0) InitPlayer(player, sun, time);
