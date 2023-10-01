@@ -31,7 +31,7 @@ int main() {
 		frames++;
 		time += playspeed == 0 ? 0.0f : TIME_STEP;
 
-		UpdatePlayer(&player, &ourSun, &cameraState, &time, playspeed == 0);
+		UpdatePlayer(&player, &ourSun, &cameraState, &time, playspeed);
 
 		if (frames > playspeed) {
 			frames = 0;

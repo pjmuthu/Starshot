@@ -41,6 +41,7 @@ void DrawMap(const CameraState* cameraState, Sun ourSun, float time) {
 				DrawRectangleRec(recPlanet, planet.armor > j ? DARKGRAY : LIGHTGRAY);
 				DrawRectangleLinesEx(recPlanet, 1 / cameraState->camera.zoom, DARKGRAY);
 			}
+
 			for (int j = 0; j < planet.moonCount; j++) {
 				Moon moon = planet.moons[j];
 				Vector2 moonPosition = { moon.position.x, moon.position.y * cameraState->tilt };
@@ -52,6 +53,7 @@ void DrawMap(const CameraState* cameraState, Sun ourSun, float time) {
 					DrawRectangleLinesEx(recMoon, 1 / cameraState->camera.zoom, DARKGRAY);
 				}
 			}
+
 		}
 	}
 
@@ -74,6 +76,29 @@ void DrawPlayer(Player* player, const CameraState* cameraState) {
 	if (player->numPoints < MAX_PATH_POINTS) {
 		DrawCircleV(player->path[player->numPoints - 1], 4 / cameraState->camera.zoom, RED);
 	}
+
+	//DrawText(TextFormat("%0.0f%", Vector2Distance(player->position, player->sensorTarget->position) - player->sensorTarget->radius), (player->position.x + player->sensorTarget->position.x) / 2, (player->position.y + player->sensorTarget->position.y) / 2 * cameraState->tilt, 32, GRAY);
+	//DrawText(TextFormat("%0.0f%", Vector2Distance(player->position, player->sensorTarget->position)), (player->position.x + player->sensorTarget->position.x) / 2, (player->position.y + player->sensorTarget->position.y) / 2 * cameraState->tilt, 32, GRAY);
+
+	float fraction = player->sensor / player->sensorMax;
+
+	if (fraction < 0.5)
+	{	/*
+		if (fraction < 0.5) {
+			fraction = fraction / 0.5;
+		}
+		else {
+			fraction = 1.0 - (fraction - 0.5) / 0.5;
+		}
+
+		position = Vector2Lerp(player->position, player->sensorTargetPosition, fraction);
+		position.y *= cameraState->tilt;
+		DrawCircleV(position, 4, LIGHTGRAY);
+		*/
+		DrawLine(player->position.x, player->position.y * cameraState->tilt, player->sensorTargetPosition.x, player->sensorTargetPosition.y * cameraState->tilt, ColorAlpha(LIGHTGRAY, 0.5));
+
+	}
+	
 }
 
 
@@ -87,11 +112,14 @@ void DrawUI(Player* player, int* playspeed) {
 
 
 	Rectangle sensorLevelBackground = { 64, 40, 0.5 * player->sensorMax, 16 };
-	healthBar = (Rectangle) { sensorLevelBackground.x, sensorLevelBackground.y, sensorLevelBackground.width, sensorLevelBackground.height };
+	healthBar = (Rectangle){ sensorLevelBackground.x, sensorLevelBackground.y, sensorLevelBackground.width, sensorLevelBackground.height };
 	healthBar.width = 0.5 * player->sensor;
 	DrawRectangleRec(healthBar, GRAY);
 	DrawRectangleLinesEx(sensorLevelBackground, 1.0f, LIGHTGRAY);
 	DrawText(TextFormat("Snsr                       %0.1f%%", 100 * player->sensor / player->sensorMax), 25, 40, 16, GRAY);
+
+
+	DrawText(TextFormat("Points: %i%", player->science), screenWidth - 80, 10, 16, GRAY);
 
 
 }

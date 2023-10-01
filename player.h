@@ -14,16 +14,18 @@ typedef struct {
     Planet collisionObject;
     float fuelMax;
     float fuel;
-    int score;
+    int science;
     float sensor;
     float sensorMax;
     float sensorRange;
     float relativeVelocity;
+    Vector2 sensorTargetPosition;
+    float sensorTargetDistance;
 } Player;
 
 
 void InitPlayer(Player* player, Sun* sun, float * time);
-void UpdatePlayer(Player* player, Sun* sun, const CameraState* cameraState, float * time, bool paused);
+void UpdatePlayer(Player* player, Sun* sun, const CameraState* cameraState, float * time, int playSpeed);
 void ApplyEngine(Player* player, float acceleration, Vector2 direction);
 
 #endif // PLAYER_H
