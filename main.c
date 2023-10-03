@@ -24,6 +24,9 @@ int main() {
 	float timeStep = TIME_STEP;
 	int frames = 0;
 	int playspeed = 1;
+	player.pathHistoryCount = 0;
+	player.pathHistoryCountRecord = 0;
+
 	InitPlayer(&player, &ourSun, &time);
 
 	SetTargetFPS(TARGET_FPS);

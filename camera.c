@@ -5,10 +5,10 @@
 CameraState InitCameraState() {
 
 	CameraState cameraState;
-	cameraState.camera.target = (Vector2){ 0, 0 };
+	cameraState.camera.target = (Vector2){ 0, 512 };
 	cameraState.camera.offset = (Vector2){ GetScreenWidth() / 2, GetScreenHeight() / 2 };
 	cameraState.camera.rotation = 0.0f;
-	cameraState.camera.zoom = 0.1f;
+	cameraState.camera.zoom = 0.25f;
 	cameraState.velocity = (Vector2){ 0, 0 };
 	return cameraState;
 }

@@ -21,6 +21,9 @@ typedef struct {
     float relativeVelocity;
     Vector2 sensorTargetPosition;
     float sensorTargetDistance;
+    Vector2 pathHistory[65536];
+    int pathHistoryCount;
+    int pathHistoryCountRecord;
 } Player;
 
 

@@ -2,6 +2,9 @@
 #include "raymath.h"
 #include "map.h"
 
+
+static float timeRecord;
+
 void InitPlayer(Player* player, Sun* sun, float* time) {
 	player->position = sun->startPosition;
 	player->velocity = sun->startVelocity;
@@ -15,6 +18,13 @@ void InitPlayer(Player* player, Sun* sun, float* time) {
 	player->sensor = player->sensorMax;
 	player->sensorRange = 128;
 	player->science = 0;
+	timeRecord = 0;
+	//for (int i = 0; i < player->pathHistoryCount; i++) {
+	//	player->pathHistoryRecord[i] = player->pathHistory[i];
+	//}
+	player->pathHistoryCountRecord = player->pathHistoryCount;
+	player->pathHistoryCount = 1;
+	player->pathHistory[0] = sun->startPosition;
 
 	InitMap(sun);
 }
@@ -139,7 +149,6 @@ void UpdatePlayer(Player* player, Sun* sun, const CameraState* cameraState, floa
 	float currentTime = *time;
 
 
-
 	if (player->sensor >= player->sensorMax) {
 		performScan(player, sun);
 	}
@@ -172,6 +181,12 @@ void UpdatePlayer(Player* player, Sun* sun, const CameraState* cameraState, floa
 		player->position = Vector2Add(player->position, player->velocity);
 	}
 
+
+	if ((*time - timeRecord) > 0.1f) {
+		timeRecord = *time;
+		player->pathHistory[player->pathHistoryCount++] = player->position;
+		player->pathHistoryCountRecord = player->pathHistoryCountRecord > player->pathHistoryCount ? player->pathHistoryCountRecord : player->pathHistoryCount;
+	}
 
 }
 
