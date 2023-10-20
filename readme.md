@@ -3,7 +3,7 @@
 **Overview:**
 Starshot is a rogue-like space exploration puzzle game that immerses players in a minimalistic terminal-style interface. Players navigate through a symbolic solar system, collecting data from planets and moons. They must manage limited fuel, strategically use thrusts to change their trajectory, and account for the time-based decay of data.
 
-![alt text](https://github.com/pjmuthu/Starshot/blob/main/image.jpg?raw=true)
+![alt text](https://github.com/pjmuthu/Starshot/blob/main/image.png?raw=true)
 
 
 **Core Mechanics:**
