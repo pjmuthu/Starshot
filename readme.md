@@ -27,41 +27,12 @@ Starshot is a rogue-like space exploration puzzle game that immerses players in 
 - Distinct colors for planets, moons, and the player's probe symbol.
 - Minimal UI elements displaying fuel, data points, and objectives.
 
-**Audio Design:**
-- Terminal-style electronic sounds for thrusts, collisions, and data collection.
-- Audio cues for mission updates and jump sequences.
-- Calming ambient music to enhance the exploratory atmosphere.
-
 **Levels and Progression:**
 - Each run represents a unique "terminal session" with a distinct quest and objectives.
 - Successful data collection provides points for upgrades and new thrust commands.
 - Difficulty increases as players progress through different solar systems.
 
 **Controls:**
-- Navigate the game using keyboard inputs to change the probe's trajectory.
+- Navigate the game using mouse to change the probe's trajectory.
 - Input thrust commands to fire engines and alter the probe's path.
 - Immerse players in a retro-inspired terminal experience.
-
-
-**UI Design**
-
-**Center of the Screen: Radar View**
-- The radar occupies the center of the screen and is the main focus.
-- **Celestial Bodies:** Planets and moons are represented as circles (planets) and smaller dots (moons).
-- **Player Probe:** Represented by a distinctive triangle symbol.
-- **Data Points:** Shown as a circular progress bar that starts full and visually decays over time. If the player's probe is near a celestial body, the bar fills up.
-
-**Top Left Corner: System Information**
-- **Fuel Indicator:** Numerical display of remaining fuel units.
-
-**Bottom Left Corner: Collected Data**
-- **Jump Charges:** Numerical representation of available jump charges, if applicable.
-
-**Top Right Corner: Jump Charge Information**
-- **Data Collected:** A level-up style display that shows the amount of data points collected. This could be represented as a progress bar that fills up as data is collected, showing a numerical value alongside.
-
-**Additional Considerations:**
-- **Color Palette:** Use distinct colors for the symbols and indicators, ensuring good contrast against the background.
-- **Visual Effects:** Implement subtle animations, like fading or pulsing, to indicate data decay and thrust actions.
-- **Audio Indicators:** Employ radar-like sound effects for interactions to enhance immersion.
-
